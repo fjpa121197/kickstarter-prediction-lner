@@ -1,6 +1,6 @@
 # project related
-
-data
+data/
+ml_pipeline/data
 .history
 
 
