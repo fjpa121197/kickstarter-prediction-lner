@@ -1,0 +1,24 @@
+name: Run ML Pipeline Local
+on:
+  push:
+    branches-ignore:
+      - "main"
+    paths-ignore:
+      - "notebooks_ds/"
+      - "data/"
+
+jobs:
+  unpack-data-files:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Unzip data files
+        run: |
+          ls ml_pipeline/data
+          unzip ml_pipeline/data/kickstarter_train_test_onehot.zip -d ml_pipeline/data
+      
+      - uses: actions/upload-artifact@v3
+        with:
+          name: my-data-artifacts
+          path: ml_pipeline/data
