@@ -1,0 +1,94 @@
+name: Run ML Pipeline Local
+on:
+  push:
+    branches:
+      - "main"
+    paths-ignore:
+      - "notebooks_ds/"
+      - "data/"
+
+jobs:
+  unpack-data-files:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Unzip data files
+        run: |
+          ls ml_pipeline/data
+          unzip ml_pipeline/data/kickstarter_train_test_onehot.zip -d ml_pipeline/data
+      
+      - uses: actions/upload-artifact@v3
+        with:
+          name: my-data-artifacts
+          path: ml_pipeline/data/kickstarter_train_test_onehot.csv
+
+  test-pipeline:
+    needs: unpack-data-files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Download ML pipeline data file
+        uses: actions/download-artifact@master
+        with:
+          name: my-data-artifacts
+          path: ml_pipeline/data
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.8"
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f ml_pipeline/requirements.txt ]; then pip install -r ml_pipeline/requirements.txt; fi
+
+
+      - name: Unit testing (pytest)
+        run: |
+          cd ml_pipeline
+          pytest -v
+
+  run-pipeline:
+    needs: test-pipeline
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Download ML pipeline data file
+        uses: actions/download-artifact@master
+        with:
+          name: my-data-artifacts
+          path: ml_pipeline/data
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.8"
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f ml_pipeline/requirements.txt ]; then pip install -r ml_pipeline/requirements.txt; fi
+
+      - name: Run pipeline
+        run: |
+          cd ml_pipeline
+          ls data/
+          python run_pipeline.py -d data/kickstarter_train_test_onehot.csv
+      
+      - name: Upload model artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: my-model-artifacts
+          path: ml_pipeline/model_1.h5
+          
+
+
+
+
+      
