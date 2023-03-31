@@ -78,7 +78,8 @@ jobs:
       - name: Run pipeline
         run: |
           cd ml_pipeline
-          python run_pipeline.py -d ml_pipeline/data/kickstarter_train_test_onehot.csv
+          ls data/
+          python run_pipeline.py -d data/kickstarter_train_test_onehot.csv
           
 
 
