@@ -47,7 +47,3 @@ It is possible to run the ML pipeline locally, without the need of Docker. These
 >**Note:**
 >
 >Make sure the data zip files have been unzipped.
-
-## Automated Running
-
-Using github actions, this repositories automatically runs remotely and tests the whole pipeline.
