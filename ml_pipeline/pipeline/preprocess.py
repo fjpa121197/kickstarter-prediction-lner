@@ -27,6 +27,14 @@ class Preprocessor():
         
         return df
     
+    
+    def _separate_features_target(self, df):
+        
+        X = df.drop(self.target, axis = 1)
+        y = df[self.target]
+        
+        return X, y
+    
     def split_dataset(self, test_size):
         
         df = self.data_df
@@ -34,11 +42,8 @@ class Preprocessor():
         
         self.train_df, self.test_df = train_test_split(df, random_state= self.random_state, test_size= test_size)
         
-        X_train = self.train_df.drop(self.target, axis = 1)
-        X_test = self.test_df.drop(self.target, axis = 1)
-        
-        y_train = self.train_df[self.target]
-        y_test = self.test_df[self.target]
+        X_train, y_train = self._separate_features_target(self.train_df)
+        X_test, y_test = self._separate_features_target(self.test_df)
         
         return X_train, X_test, y_train, y_test
         
