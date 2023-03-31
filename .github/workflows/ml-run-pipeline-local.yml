@@ -32,7 +32,7 @@ jobs:
       - name: Download ML pipeline artifacts
         uses: actions/download-artifact@master
         with:
-          name: my-data-artficats
+          name: my-data-artifacts
           path: ml_pipeline/data
 
       - run: |
