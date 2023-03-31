@@ -29,6 +29,12 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
+      - name: Download ML pipeline artifacts
+        uses: actions/download-artifact@master
+        with:
+          name: my-data-artficats
+          path: ml_pipeline/data
+
       - run: |
           ls
           ls ml_pipeline
