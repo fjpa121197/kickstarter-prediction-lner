@@ -15,7 +15,6 @@ def main():
     parser = argparse.ArgumentParser(
         description="ML Pipeline, triggers a ML pipeline that trains a neural network based on provided a data file path."
     )
-    
     parser.add_argument(
         "-d",
         "--data-file",
@@ -36,9 +35,10 @@ def main():
     else:
         print("File path is not valid. Please check directory and file exists.")
         sys.exit(1)
-    
-    try:
-        
+
+
+    # Start with pipeline
+    try: 
         # Preprocessing Step
         preprocessor = Preprocessor(data_file_path=data_file_path, target = 'usd_smooth_pledged_per_day', 
                                     random_state= 212, index_col='ID')
@@ -46,10 +46,13 @@ def main():
         
         # Training Step
         trainer = NNRegressor() # Initialize NN model using default architecture
-        trainer.fit(X_train, y_train, epochs=2) # Train model using training set and for specific number of epochs
+        trainer.fit(X_train, y_train, epochs=15) # Train model using training set and for specific number of epochs
         preds = trainer.predict(X_test) # Get predictions using trained model
+        
         # Save artifacts Step
         trainer.save_model()
+        
+        # end pipeline
         
     except Exception as e:
         print(f"Exeception: {e}")
