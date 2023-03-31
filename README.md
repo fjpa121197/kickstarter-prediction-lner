@@ -10,6 +10,8 @@ Code repo holding code of a training production pipeline, as part of the hiring 
 
 - `run_pipeline.sh`: bash script used to trigger the whole ml pipeline and run it using a docker container.
 
+- `.github/workflows/`: folder containing github workflow files that automatically test and run pipeline for new pushes to repo.
+
 ## Running locally
 
 In order to run this pipeline locally, proceed with cloning this repository to your local machine.
@@ -47,3 +49,18 @@ It is possible to run the ML pipeline locally, without the need of Docker. These
 >**Note:**
 >
 >Make sure the data zip files have been unzipped.
+
+Dont feel like running it locally? See section below.
+
+## CI/CD - Using Github actions
+
+The files inside `.github/workflows/` folder, have a series of workflows/set of instructions to run, this is all run and hosted using remote resources. This automates the testing and deployment of code, so when new changes are made to different components of the ML pipeline, this can be tested automatically, if successfull, deploy (run) the pipeline from end-to-end.
+
+Follow these steps to trigger the workflows:
+
+1. Clone repo to your local computer.
+2. Push repositories to Github.
+3. If you push to main branch, it will trigger a CI&CD workflow, where it will test the pipeline and then run it using Docker and locally.
+4. If you push to another branch, it will trigger a CI workflow only, where it will only test the pipeline.
+
+If you head to the github repositories, and go to the Actions tab, you should see that the workflow(s) are running. For the workflow that does CI&CD, after finishing, it will create artifacts associated to it, and there, you can find my-model-artifacts, which contains the trained model.
