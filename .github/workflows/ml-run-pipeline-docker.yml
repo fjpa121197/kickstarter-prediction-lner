@@ -1,7 +1,7 @@
 name: Run ML Pipeline Docker
 on:
   push:
-    branches-ignore:
+    branches:
       - "main"
     paths-ignore:
       - "notebooks_ds/"
@@ -78,6 +78,13 @@ jobs:
       - name: Run pipeline
         run: |
           bash run_pipeline.sh
+
+      - name: Upload model artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: my-model-artifacts
+          path: ml_pipeline/artifacts
+      
           
 
 
