@@ -1,6 +1,6 @@
 # project related
-data/
-ml_pipeline/data
+*.csv
+ml_pipeline/data/*.csv
 .history
 
 
