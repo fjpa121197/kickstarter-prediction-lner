@@ -1,3 +1,4 @@
+from fsspec import Callback
 import tensorflow as tf
 
 from tensorflow.keras import Sequential
@@ -6,7 +7,9 @@ from tensorflow.keras.losses import MeanSquaredError
 from tensorflow.keras.metrics import MeanSquaredError
 
 import pandas as pd
+import logging
 
+logger = logging.getLogger(__name__)
 
 class NNRegressor():
     """
@@ -16,7 +19,7 @@ class NNRegressor():
     """
     
     def __init__(self):
-        print("Initializing trainer ...")
+        logger.info("Initializing trainer ...")
         self._model = self._create_model()
         self._trained_model = None
     
@@ -54,7 +57,8 @@ class NNRegressor():
         self._trained_model_history  = self._model.fit(X_train, y_train, 
                                                            epochs = epochs, batch_size = batch_size, 
                                                            validation_split = validation_split,
-                                                           verbose = 2
+                                                           verbose = 0,
+                                                           callbacks = [LoggingCallback(logger.info)]
                                                            )
         
     
@@ -69,7 +73,7 @@ class NNRegressor():
             list: model predictions.
         """
         
-        preds = self._model.predict(X_test, verbose = 2)
+        preds = self._model.predict(X_test, verbose = 0)
         
         return preds
     
@@ -81,4 +85,18 @@ class NNRegressor():
             path (str, optional): specific path to store model on. Defaults to None.
         """
 
-        self._model.save('model_1.h5')
+        self._model.save('model_1.h5', )
+        
+        
+class LoggingCallback(Callback):
+    """Callback that logs message at end of epoch.
+    """
+
+    def __init__(self, print_fcn=print):
+        Callback.__init__(self)
+        self.print_fcn = print_fcn
+
+    def on_epoch_end(self, epoch, logs={}):
+
+        msg = "Epoch: %i %s" % (epoch, ", ".join("%s: %f" % (k, v) for k, v in logs.items()))
+        self.print_fcn(msg)

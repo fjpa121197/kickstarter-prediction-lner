@@ -1,6 +1,10 @@
 from sklearn.model_selection import train_test_split
 import pandas as pd
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 class Preprocessor():
     """
     Create a Preprocessor object that handles data preparation steps needed to transform and prepare data for next steps in a ML cycle.
@@ -20,7 +24,7 @@ class Preprocessor():
     """
     def __init__(self, data_file_path : str, target : str, random_state: int, index_col : str = None):
         
-        print("Initializing data preprocessor ... ")
+        logger.info("Initializing data preprocessor ... ")
         
         # Define initial given attributes
         self.data_file_path = data_file_path

@@ -2,6 +2,7 @@ import argparse
 import sys
 import traceback
 import os
+import logging
 
 
 from pipeline.preprocess import Preprocessor
@@ -10,7 +11,8 @@ from pipeline.train import NNRegressor
 
 def main():
     
-    print("Initiating ML pipeline run ...")
+    logging.basicConfig(filename='mlpipeline.log', level=logging.DEBUG, format='%(asctime)s %(name)s: %(message)s')
+    logging.info("Initiating ML pipeline run ...")
     
     parser = argparse.ArgumentParser(
         description="ML Pipeline, triggers a ML pipeline that trains a neural network based on provided a data file path."
@@ -33,7 +35,7 @@ def main():
         data_file_path = args.data_file_path
         
     else:
-        print("File path is not valid. Please check directory and file exists.")
+        logging.error("File path is not valid. Please check directory and file exists.")
         sys.exit(1)
 
 
@@ -53,6 +55,8 @@ def main():
         trainer.save_model()
         
         # end pipeline
+        
+        logging.info("ML pipeline run finished")
         
     except Exception as e:
         print(f"Exeception: {e}")

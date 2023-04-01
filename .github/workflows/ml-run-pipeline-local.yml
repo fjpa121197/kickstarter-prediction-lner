@@ -86,7 +86,9 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: my-model-artifacts
-          path: ml_pipeline/model_1.h5
+          path: |
+            ml_pipeline/model_1.h5
+            ml_pipeline/mlpipeline.log
           
 
 
